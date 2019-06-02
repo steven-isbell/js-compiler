@@ -66,8 +66,8 @@ function transpile(ast) {
 
 console.log(
   pipe(
-    transpile,
+    lexicalAnalyzer,
     parser,
-    lexicalAnalyzer
+    transpile
   )(process.argv[2])
 );
