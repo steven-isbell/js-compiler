@@ -30,6 +30,10 @@ function parser(tokens) {
   // if the token is an operation, parse it
   const parseOp = () => {
     const node = { val: consume(), type: Op, expr: [] };
+    /* Builds AST
+    While there's tokens, parse them
+    if it's another operation, create another sub node tree
+    */
     while (peek()) node.expr.push(parseExpr());
     return node;
   };
