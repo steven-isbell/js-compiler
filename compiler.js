@@ -1,3 +1,4 @@
+const fs = require("fs");
 // Utility for applying functions to input
 const { pipe } = require("./utils");
 
@@ -69,10 +70,29 @@ function transpile(ast) {
 
 // const program = "mul 3 5 sub 2 sum 1 3 4 exp 5 8";
 
-console.log(
-  pipe(
+// Read in some text file
+fs.readFile("./sampleInput.txt", "utf8", function(err, data) {
+  if (err) {
+    throw new Error(err);
+  }
+  // Parse each line, filtering out new line whitespace
+  const parsed = data
+    .split("\n")
+    .filter(Boolean)
+    .map(pipeline)
+    .join("\n");
+  // Write to output file
+  fs.writeFileSync("sampleOutput.js", parsed);
+});
+
+// Output the expression and it's resolved output
+function pipeline(val) {
+  const output = pipe(
     lexicalAnalyzer,
     parser,
     transpile
-  )(process.argv[2])
-);
+  )(val);
+  // Eval is used because this is an interpreter
+  return `${output}
+"The expression resolves to ${eval(output)}"`;
+}
