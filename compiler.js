@@ -42,7 +42,7 @@ function parser(tokens) {
 // converts provided code into target code
 // receives ast from parser
 function transpile(ast) {
-  const opMap = { sum: "+", mul: "*", sub: "-", div: "/" };
+  const opMap = { sum: "+", mul: "*", sub: "-", div: "/", exp: "**" };
   const transpileNode = ast =>
     ast.type === Num ? transpileNum(ast) : transpileOp(ast);
   const transpileNum = ast => ast.val;
@@ -51,6 +51,6 @@ function transpile(ast) {
   return transpileNode(ast);
 }
 
-const program = "mul 3 sub 2 sum 1 3 4";
+const program = "mul 3 5 sub 2 sum 1 3 4 exp 5 8";
 
 console.log(transpile(parser(lexicalAnalyzer(program))));
