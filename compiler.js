@@ -1,3 +1,5 @@
+const { pipe } = require("./utils");
+
 const Num = Symbol("num");
 const Op = Symbol("op");
 
@@ -46,11 +48,26 @@ function transpile(ast) {
   const transpileNode = ast =>
     ast.type === Num ? transpileNum(ast) : transpileOp(ast);
   const transpileNum = ast => ast.val;
-  const transpileOp = ast =>
-    `(${ast.expr.map(transpileNode).join(" " + opMap[ast.val] + " ")})`;
+  const transpileOp = ast => {
+    // if the operation is invalid, throw
+    if (!opMap[ast.val]) {
+      throw new SyntaxError(
+        `The operation "${ast.val}" is invalid. Currently ${Object.keys(
+          opMap
+        ).join(", ")} are supported`
+      );
+    }
+    return `(${ast.expr.map(transpileNode).join(" " + opMap[ast.val] + " ")})`;
+  };
   return transpileNode(ast);
 }
 
-const program = "mul 3 5 sub 2 sum 1 3 4 exp 5 8";
+// const program = "mul 3 5 sub 2 sum 1 3 4 exp 5 8";
 
-console.log(transpile(parser(lexicalAnalyzer(program))));
+console.log(
+  pipe(
+    transpile,
+    parser,
+    lexicalAnalyzer
+  )(process.argv[2])
+);
