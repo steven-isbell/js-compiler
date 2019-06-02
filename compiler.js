@@ -1,3 +1,4 @@
+// Utility for applying functions to input
 const { pipe } = require("./utils");
 
 const Num = Symbol("num");
