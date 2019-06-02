@@ -14,14 +14,22 @@ function parser(tokens) {
   const peek = () => tokens[c];
   const consume = () => tokens[c++];
 
-  const parseNum = () => ({ val: parseInt(consume()), type: Num });
+  // if the token is a number, parse it
+  const parseNum = () => {
+    if (!isNaN(peek())) {
+      throw new Error(`${peek()} is not a valid number`);
+    }
+    return { val: parseInt(consume(), 10), type: Num };
+  };
 
+  // if the token is an operation, parse it
   const parseOp = () => {
     const node = { val: consume(), type: Op, expr: [] };
     while (peek()) node.expr.push(parseExpr());
     return node;
   };
 
+  // if the token is a number, parse as a number, else parse as an operation
   const parseExpr = () => (/\d/.test(peek()) ? parseNum() : parseOp());
 
   return parseExpr();
