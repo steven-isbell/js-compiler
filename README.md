@@ -1,3 +1,3 @@
 # JS Compiler
 
-A useless compiler for learning the basics of compilers.
+A less than useful compiler for learning the basics of compilers.
