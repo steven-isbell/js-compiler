@@ -58,6 +58,7 @@ function transpile(ast) {
     // if the operation is invalid, throw
     if (!opMap[ast.val]) {
       const supOps = Object.keys(opMap);
+      // add ampersand to list for formatting
       const supOpsList = supOps
         .concat(supOps.splice(-2, 2).join(" & "))
         .join(", ");
