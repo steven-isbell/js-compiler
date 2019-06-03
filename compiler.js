@@ -57,10 +57,14 @@ function transpile(ast) {
   const transpileOp = ast => {
     // if the operation is invalid, throw
     if (!opMap[ast.val]) {
+      const supOps = Object.keys(opMap);
+      const supOpsList = supOps
+        .concat(supOps.splice(-2, 2).join(" & "))
+        .join(", ");
       throw new SyntaxError(
-        `The operation "${ast.val}" is invalid. Currently ${Object.keys(
-          opMap
-        ).join(", ")} are supported`
+        `The operation "${
+          ast.val
+        }" is invalid. Currently ${supOpsList} are supported`
       );
     }
     return `(${ast.expr.map(transpileNode).join(" " + opMap[ast.val] + " ")})`;
